@@ -1,17 +1,16 @@
 package config
 
 import (
+	"back-end/KEY"
 	"context"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-const KEY = "mongodb+srv://ilyasuseinov3301:mishka_2023@recipebook.xxu8dre.mongodb.net/?retryWrites=true&w=majority&appName=RecipeBook"
-
 var MongoClient *mongo.Client
 
 func init() {
-	ConnectToDB(KEY)
+	ConnectToDB(KEY.KEY)
 }
 func ConnectToDB(KEY string) {
 
