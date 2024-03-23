@@ -7,6 +7,6 @@ import (
 
 func main() {
 	r := gin.Default()
-	r.GET("/getRecipe/:page", (&controllers.RecipeController{}).GetRecipes)
+	r.GET("Mtaste/API/getRecipe/:page", (&controllers.RecipeController{}).GetRecipes)
 	r.Run()
 }
