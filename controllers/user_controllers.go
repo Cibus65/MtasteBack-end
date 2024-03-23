@@ -10,21 +10,23 @@ import (
 type UserController struct{}
 
 func (_ *UserController) AddToFavourite(c *gin.Context) {
+	UserID, err := strconv.Atoi(c.Param("userID"))
+	if err != nil {
+		panic(err)
+	}
 	link := c.Param("link")
-	recipeID, err := strconv.Atoi(c.Param("id"))
+	recipeID, err := strconv.Atoi(c.Param("recipeID"))
 	if err != nil {
 		c.Error(err)
 	}
-	message, err := (&model.User{
-		Login:        "xapsiel2",
-		Email:        "xapsiel@mail.ru",
-		Password:     "1234",
-		ID:           1,
-		SavedRecipes: nil,
-	}).AddFavourite(link, recipeID)
+	message, err := (&model.User{}).AddFavourite(UserID, link, recipeID)
 	if err != nil {
 		c.Error(err)
 	}
 	c.JSON(http.StatusOK, message)
 
+}
+func (_ *UserController) AddNewUser(c *gin.Context) {
+	login, email, password := c.Param("login"), c.Param("email"), c.Param("password")
+	(&model.User{}).AddUser(login, email, password)
 }

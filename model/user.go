@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
+	"math/rand"
 )
 
 type User struct {
@@ -15,17 +16,21 @@ type User struct {
 	SavedRecipes []map[string]interface{}
 }
 
-func (u *User) AddFavourite(link string, recipeID int) (string, error) {
+func (u *User) AddFavourite(userID int, link string, recipeID int) (string, error) {
 	collection := config.MongoClient.Database("Users").Collection("users")
 	var user User
-	filter := bson.D{{"login", u.Login}, {"id", u.ID}}
+	filter := bson.D{{"id", userID}}
+	fmt.Println(userID)
 	us := collection.FindOne(context.TODO(), filter)
-	//result := collection.FindOne(context.TODO(), filter)
-	//var recipe Recipe
 	err := us.Decode(&user)
 	if err != nil {
 		return "", err
 	}
+	if user.ID == 0 {
+		return "Такого пользователя не существует", nil
+	}
+	//result := collection.FindOne(context.TODO(), filter)
+	//var recipe Recipe
 
 	newFav := make(map[string]interface{})
 	newFav["link"] = link
@@ -50,9 +55,20 @@ func (u *User) AddFavourite(link string, recipeID int) (string, error) {
 	return fmt.Sprintf("Рецепт с ID[ %d ] был добавлен", recipeID), nil
 }
 
-//func (u *User) AddUser(login ,email,password  string){
-//	filter := bson.D{{"login", u.Login}, {"id", u.ID}}
-//
-//}
-//
-//func (u *User)
+func (u *User) AddUser(login, email, password string) string {
+	collection := config.MongoClient.Database("Users").Collection("users")
+	filter := bson.D{{"login", login}}
+	var user User
+	us := collection.FindOne(context.TODO(), filter)
+	us.Decode(&user)
+	if user.ID != 0 {
+		return "Пользователь с таким ником уже существует"
+	}
+	user.ID = rand.Intn(1000_000_000) + 1000_000_00
+	user.Login = login
+	user.Email = email
+	user.Password = password
+	collection.InsertOne(context.TODO(), user)
+	return "Пользователь зарегистрирован"
+
+}
