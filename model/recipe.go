@@ -19,7 +19,7 @@ type Recipe struct {
 	UnixTime    int               `json:"unixTime"`
 }
 
-func (r *Recipe) Get(page int) ([]Recipe, error) {
+func (r *Recipe) GetByPage(page int) ([]Recipe, error) {
 	collection := config.MongoClient.Database("RecipeBook").Collection("recipes")
 	filter := bson.D{}
 	opts := options.Find().SetSort(bson.D{{"unixtime", -1}, {"id", -1}})
@@ -40,11 +40,20 @@ func (r *Recipe) Get(page int) ([]Recipe, error) {
 			break
 		}
 	}
-	for _, recipe := range recipes {
-		res, _ := bson.MarshalExtJSON(recipe, false, false)
-		fmt.Println(string(res))
-	}
+
 	return recipes[page*20-20 : page*20], nil
+}
+func (r *Recipe) GetByID(id int) (Recipe, error) {
+	var recipe Recipe
+	collection := config.MongoClient.Database("RecipeBook").Collection("recipes")
+	filter := bson.D{{"id", id}}
+	cursor := collection.FindOne(context.TODO(), filter)
+	err := cursor.Decode(&recipe)
+	if err != nil {
+		return Recipe{}, err
+	}
+	fmt.Println(recipe)
+	return recipe, nil
 }
 
 //func (r *Recipe) getByCategory(category string, page int) {
