@@ -15,7 +15,7 @@ func init() {
 	var KEY string
 	err := godotenv.Load("./.env")
 	if err != nil {
-		KEY = "mongodb+srv://ilyasuseinov3301:mishka_2023@recipebook.xxu8dre.mongodb.net/?retryWrites=true&w=majority&appName=RecipeBook"
+		KEY = ""
 
 	} else {
 		KEY = os.Getenv("KEY")
