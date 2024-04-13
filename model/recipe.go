@@ -3,9 +3,9 @@ package model
 import (
 	"back-end/config"
 	"context"
-	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"log"
 )
 
 type Recipe struct {
@@ -25,6 +25,7 @@ func (r *Recipe) Get(page int) ([]Recipe, error) {
 	opts := options.Find().SetSort(bson.D{{"unixtime", -1}, {"id", -1}})
 	cursor, err := collection.Find(context.TODO(), filter, opts)
 	if err != nil {
+		log.Fatal(err)
 		return []Recipe{}, err
 	}
 	var recipes []Recipe
@@ -32,6 +33,8 @@ func (r *Recipe) Get(page int) ([]Recipe, error) {
 		var recipe Recipe
 
 		if err = cursor.Decode(&recipe); err != nil {
+
+			log.Fatal(err)
 			return []Recipe{}, err
 		}
 		if len(recipes) < (page * 20) {
@@ -40,10 +43,9 @@ func (r *Recipe) Get(page int) ([]Recipe, error) {
 			break
 		}
 	}
-	for _, recipe := range recipes {
-		res, _ := bson.MarshalExtJSON(recipe, false, false)
-		fmt.Println(string(res))
-	}
+	//for _, recipe := range recipes {
+	//	res, _ := bson.MarshalExtJSON(recipe, false, false)
+	//}
 	return recipes[page*20-20 : page*20], nil
 }
 

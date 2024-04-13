@@ -12,11 +12,14 @@ import (
 var MongoClient *mongo.Client
 
 func init() {
-	err := godotenv.Load(".env")
+	var KEY string
+	err := godotenv.Load("./.env")
 	if err != nil {
-		panic(err)
+		KEY = "mongodb+srv://ilyasuseinov3301:mishka_2023@recipebook.xxu8dre.mongodb.net/?retryWrites=true&w=majority&appName=RecipeBook"
+
+	} else {
+		KEY = os.Getenv("KEY")
 	}
-	KEY := os.Getenv("KEY")
 	fmt.Println(KEY)
 	ConnectToDB(KEY)
 }
