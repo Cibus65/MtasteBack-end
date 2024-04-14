@@ -28,20 +28,38 @@ func (r *Recipe) GetByPage(page int) ([]Recipe, error) {
 		return []Recipe{}, err
 	}
 	var recipes []Recipe
+	max_id := 0
+
 	for cursor.Next(context.TODO()) {
 		var recipe Recipe
 
 		if err = cursor.Decode(&recipe); err != nil {
 			return []Recipe{}, err
 		}
-		if len(recipes) < (page * 20) {
+		max_id = recipe.ID
+		break
+	}
+	cursor, err = collection.Find(context.TODO(), bson.D{{"id", bson.D{{"$gte", max_id + 1 - page*20}}}})
+	if err != nil {
+		return []Recipe{}, err
+	}
+	for cursor.Next(context.TODO()) {
+		var recipe Recipe
+
+		if err = cursor.Decode(&recipe); err != nil {
+			return []Recipe{}, err
+		}
+		if len(recipes) < 20 {
 			recipes = append(recipes, recipe)
 		} else {
 			break
 		}
 	}
+	//if len(recipes) < ( 20) {
+	//	return nil, fmt.Errorf("Такой страницы не существует")
+	//}
 
-	return recipes[page*20-20 : page*20], nil
+	return recipes, nil
 }
 func (r *Recipe) GetByID(id int) (Recipe, error) {
 	var recipe Recipe

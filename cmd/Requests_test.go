@@ -21,12 +21,12 @@ func Test_request_by_page(t *testing.T) {
 
 	resp, err := http.Get(fmt.Sprintf("http://localhost:8080/Mtaste/API/getRecipeByPage/%d", i+1))
 	if err != nil {
-		log.Fatalf("Failed to get info to %d page\n\tERROR: %s", i+1, err)
+		log.Fatalf("Failed to get info into %d page\n\tERROR: %s", i+1, err)
 		t.Error(err)
 	} else {
 		body, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
-			log.Fatalf("Failed to get info to %d page\n\tERROR: %s", i+1, err)
+			log.Fatalf("Failed to get info into %d page\n\tERROR: %s", i+1, err)
 			t.Error(err)
 		}
 		strbody := string(body)
