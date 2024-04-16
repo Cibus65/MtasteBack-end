@@ -1,3 +1,5 @@
 .env
 config/KEY.go
 app.log
+cover.html
+cover.out

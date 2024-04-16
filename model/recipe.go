@@ -3,7 +3,6 @@ package model
 import (
 	"back-end/config"
 	"context"
-	"fmt"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -70,7 +69,6 @@ func (r *Recipe) GetByID(id int) (Recipe, error) {
 	if err != nil {
 		return Recipe{}, err
 	}
-	fmt.Println(recipe)
 	return recipe, nil
 }
 
