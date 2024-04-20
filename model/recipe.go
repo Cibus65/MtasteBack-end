@@ -54,10 +54,6 @@ func (r *Recipe) GetByPage(page int) ([]Recipe, error) {
 			break
 		}
 	}
-	//if len(recipes) < ( 20) {
-	//	return nil, fmt.Errorf("Такой страницы не существует")
-	//}
-
 	return recipes, nil
 }
 func (r *Recipe) GetByID(id int) (Recipe, error) {
