@@ -19,7 +19,7 @@ type Recipe struct {
 }
 
 func (r *Recipe) GetByPage(page int) ([]Recipe, error) {
-	collection := config.MongoClient.Database("RecipeBook").Collection("recipes")
+	collection := config.MongoClient.Database("RecipeBook").Collection("recipe")
 	filter := bson.D{}
 	opts := options.Find().SetSort(bson.D{{"unixtime", -1}, {"id", -1}})
 	cursor, err := collection.Find(context.TODO(), filter, opts)
@@ -58,13 +58,14 @@ func (r *Recipe) GetByPage(page int) ([]Recipe, error) {
 }
 func (r *Recipe) GetByID(id int) (Recipe, error) {
 	var recipe Recipe
-	collection := config.MongoClient.Database("RecipeBook").Collection("recipes")
+	collection := config.MongoClient.Database("RecipeBook").Collection("recipe")
 	filter := bson.D{{"id", id}}
 	cursor := collection.FindOne(context.TODO(), filter)
 	err := cursor.Decode(&recipe)
 	if err != nil {
 		return Recipe{}, err
 	}
+
 	return recipe, nil
 }
 

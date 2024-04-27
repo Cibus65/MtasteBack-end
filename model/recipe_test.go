@@ -1,7 +1,6 @@
 package model
 
 import (
-	"back-end/config"
 	"context"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -17,7 +16,7 @@ func TestRecipe_GetByPage(t *testing.T) {
 	for _, page := range page_slice {
 		actual, actual_err := (&Recipe{}).GetByPage(page)
 
-		collection := mongoClient.Database("RecipeBook").Collection("recipes")
+		collection := mongoClient.Database("RecipeBook").Collection("recipe")
 		filter := bson.D{}
 		opts := options.Find().SetSort(bson.D{{"unixtime", -1}, {"id", -1}})
 		cursor, expected_err := collection.Find(context.TODO(), filter, opts)
@@ -70,7 +69,7 @@ func TestRecipe_GetByID(t *testing.T) {
 
 	for _, id := range id_slice {
 		var expected Recipe
-		collection := mongoClient.Database("RecipeBook").Collection("recipes")
+		collection := mongoClient.Database("RecipeBook").Collection("recipe")
 		filter := bson.D{{"id", id}}
 		cursor := collection.FindOne(context.TODO(), filter)
 		expected_err := cursor.Decode(&expected)
@@ -87,16 +86,15 @@ func TestRecipe_GetByID(t *testing.T) {
 }
 func TestMain(m *testing.M) {
 
-	key := config.KEY
-	connectToDB(key)
+	connectToDB()
 	code := m.Run()
 	os.Exit(code)
 }
 
-func connectToDB(KEY string) {
+func connectToDB() {
 
 	serverAPI := options.ServerAPI(options.ServerAPIVersion1)
-	opts := options.Client().ApplyURI(KEY).SetServerAPIOptions(serverAPI)
+	opts := options.Client().ApplyURI("mongodb://127.0.0.1").SetServerAPIOptions(serverAPI)
 
 	client, err := mongo.Connect(context.TODO(), opts)
 	if err != nil {

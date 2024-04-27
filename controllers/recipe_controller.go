@@ -42,6 +42,8 @@ func (_ *RecipeController) GetRecipe(c *gin.Context) {
 	recipe, err := (&model.Recipe{}).GetByID(id)
 	if err != nil {
 		c.Error(err)
+		c.Status(404)
+		return
 	}
 	c.JSON(http.StatusOK, recipe)
 

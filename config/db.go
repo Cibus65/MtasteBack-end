@@ -16,15 +16,15 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	err = ConnectToDB(KEY)
+	err = ConnectToDB()
 	if err != nil {
 		log.Fatalf("Failed connection to MongoDB:\n\t", err)
 	}
 }
-func ConnectToDB(KEY string) error {
+func ConnectToDB() error {
 
 	serverAPI := options.ServerAPI(options.ServerAPIVersion1)
-	opts := options.Client().ApplyURI(KEY).SetServerAPIOptions(serverAPI)
+	opts := options.Client().ApplyURI("mongodb://127.0.0.1").SetServerAPIOptions(serverAPI)
 
 	client, err := mongo.Connect(context.TODO(), opts)
 	if err != nil {
