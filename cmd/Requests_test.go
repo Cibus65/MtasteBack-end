@@ -19,7 +19,7 @@ func Test_request_by_page(t *testing.T) {
 	log.SetOutput(file)
 	i := 0
 
-	resp, err := http.Get(fmt.Sprintf("http://localhost:8080/Mtaste/API/getRecipeByPage/%d", i+1))
+	resp, err := http.Get(fmt.Sprintf("http://0.0.0.0:8080/Mtaste/API/getRecipeByPage/%d", i+1))
 	if err != nil {
 		log.Fatalf("Failed to get info into %d page\n\tERROR: %s", i+1, err)
 		t.Error(err)
@@ -44,7 +44,7 @@ func TestRequests_by_id(t *testing.T) {
 	}
 	log.SetOutput(file)
 	id := 1
-	resp, err := http.Get(fmt.Sprintf("http://localhost:8080/Mtaste/API/getRecipeByID/%d", id))
+	resp, err := http.Get(fmt.Sprintf("http://0.0.0.0:8080/Mtaste/API/getRecipeByID/%d", id))
 	if err != nil {
 		log.Fatalf("Failed to get info by recipe with id: %d\n\tERROR: %s", id, err)
 		t.Error(err)
