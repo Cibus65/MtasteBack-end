@@ -1,0 +1,24 @@
+services:
+
+  backend:
+    image: 'xapsiel3301/mtaste_backend'
+    container_name: 'backend'
+    ports:
+      - '8080:8080'
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    network_mode: host 
+  mongodb:
+    image: 'xapsiel3301/mtaste_mongodb'
+    container_name: 'mongodb'
+    network_mode: host 
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok'
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    ports:
+      - '27017:27017'
+    
+ 
