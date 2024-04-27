@@ -10,7 +10,7 @@ func RunServer() {
 
 	r.GET("Mtaste/API/getRecipeByPage/:page", (&controllers.RecipeController{}).GetRecipes)
 	r.GET("Mtaste/API/getRecipeByID/:id", (&controllers.RecipeController{}).GetRecipe)
-	r.Run()
+	r.Run("0.0.0.0:8080")
 }
 func main() {
 	RunServer()
