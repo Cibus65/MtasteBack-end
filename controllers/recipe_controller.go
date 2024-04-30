@@ -12,6 +12,10 @@ import (
 type RecipeController struct{}
 
 func (_ *RecipeController) GetRecipes(c *gin.Context) {
+	c.Header("Access-Control-Allow-Origin", "*")                   // Разрешаем все домены
+	c.Header("Access-Control-Allow-Methods", "GET, POST, OPTIONS") // Разрешаем определенные методы
+	c.Header("Access-Control-Allow-Headers", "Content-Type")       //Разрешаем определенные заголовки
+
 	file, err := os.OpenFile("../app.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
 		log.Printf("ERROR: %s", err)
@@ -35,6 +39,9 @@ func (_ *RecipeController) GetRecipes(c *gin.Context) {
 
 }
 func (_ *RecipeController) GetRecipe(c *gin.Context) {
+	c.Header("Access-Control-Allow-Origin", "*")                   // Разрешаем все домены
+	c.Header("Access-Control-Allow-Methods", "GET, POST, OPTIONS") // Разрешаем определенные методы
+	c.Header("Access-Control-Allow-Headers", "Content-Type")
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.Error(err)
