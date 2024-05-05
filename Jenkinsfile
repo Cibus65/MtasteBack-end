@@ -3,6 +3,8 @@ pipeline{
     stages{
         stage('Build image'){
             steps{
+                sh 'pwd'
+                sh 'ls'
                 script{
                     docker.build('xapsiel3301/mtaste_backend')
                 }
@@ -10,6 +12,8 @@ pipeline{
         }
         stage('push to DockerHub'){
             steps{
+                sh 'pwd'
+                sh 'ls'
                 script{
                     docker.withRegistry('https://registry.hub.docker.com', 'DockerHub' ){
                         docker.image('xapsiel3301/mtaste_backend').push('latest')
