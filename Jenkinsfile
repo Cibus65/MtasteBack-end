@@ -15,6 +15,7 @@ pipeline{
                 sh 'pwd'
                 sh 'ls'
                 script{
+                    ls
                     docker.withRegistry('https://registry.hub.docker.com', 'DockerHub' ){
                         docker.image('xapsiel3301/mtaste_backend').push('latest')
                     }
