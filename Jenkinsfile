@@ -7,10 +7,7 @@ pipeline {
                     sh "docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD"
                 }
             }
-
         }
-
-
         stage('Build image') {
             steps {
                 sh 'pwd'
@@ -22,10 +19,7 @@ pipeline {
             steps {
                 sh 'pwd'
                 sh 'ls'
-                sh ' '
-                        docker.image('xapsiel3301/mtaste_backend').push('latest')
-                    }
-                }
+                sh 'docker push'
                 sh 'pwd'
                 sh 'ls'
             }
