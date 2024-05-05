@@ -4,7 +4,7 @@ services:
     image: 'xapsiel3301/mtaste_backend'
     container_name: 'backend'
     ports:
-      - '8080:8080'
+      - '10080:8080'
     depends_on:
       mongodb:
         condition: service_healthy
@@ -19,6 +19,6 @@ services:
       timeout: 10s
       retries: 5
     ports:
-      - '27017:27017'
+      - '10080:27017'
     
  
