@@ -9,14 +9,18 @@ pipeline{
            }
         }
         stage('push to DockerHub'){
-            script{
-                docker.withRegistry('https://registry.hub.docker.com', 'DockerHub' ){
-                    docker.image('xapsiel3301/mtaste_backend').push('latest')
+            steps{
+                script{
+                    docker.withRegistry('https://registry.hub.docker.com', 'DockerHub' ){
+                        docker.image('xapsiel3301/mtaste_backend').push('latest')
+                    }
                 }
             }
         }
         stage('docker compose'){
-            sh 'docker compose up -d'
+            steps{
+                sh 'docker compose up -d'
+            }
         }
     }
     post{
