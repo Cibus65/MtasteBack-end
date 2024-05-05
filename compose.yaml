@@ -19,6 +19,6 @@ services:
       timeout: 10s
       retries: 5
     ports:
-      - '10080:27017'
+      - '10082:27017'
     
  
