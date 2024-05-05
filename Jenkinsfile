@@ -21,7 +21,7 @@ pipeline {
             steps {
                 sh 'pwd'
                 sh 'ls'
-                sh 'docker push'
+                sh 'docker push xapsiel3301/mtaste_backend'
                 sh 'pwd'
                 sh 'ls'
             }
