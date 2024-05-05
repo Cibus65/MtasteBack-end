@@ -8,11 +8,13 @@ services:
     depends_on:
       mongodb:
         condition: service_healthy
-    network_mode: host 
+    networks:
+      - backend_network
   mongodb:
     image: 'xapsiel3301/mtaste_mongodb'
     container_name: 'mongodb'
-    network_mode: host 
+    networks:
+      - backend_network
     healthcheck:
       test: echo 'db.runCommand("ping").ok'
       interval: 10s
@@ -21,4 +23,7 @@ services:
     ports:
       - '10082:27017'
     
- 
+
+
+networks:
+  backend_network:
