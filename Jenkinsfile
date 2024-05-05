@@ -1,23 +1,28 @@
 pipeline {
     agent any
     stages {
+        stage('login'){
+            script {
+                withCredentials([usernamePassword(credentialsId: 'DockerHub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_TOKEN')]) {
+                    sh "docker login -u $DOCKER_USERNAME -p $DOCKER_TOKEN"
+                }
+            }
+
+        }
+
+
         stage('Build image') {
             steps {
                 sh 'pwd'
                 sh 'ls'
-                script {
-                    ls
-                    docker.build('xapsiel3301/mtaste_backend')
-                }
+                sh 'docker build -t xapsiel3301/mtaste_backend .'
             }
         }
         stage('Push to DockerHub') {
             steps {
                 sh 'pwd'
                 sh 'ls'
-                script {
-                    ls()
-                    docker.withRegistry('https://registry.hub.docker.com', 'DockerHub') {
+                sh ' '
                         docker.image('xapsiel3301/mtaste_backend').push('latest')
                     }
                 }
