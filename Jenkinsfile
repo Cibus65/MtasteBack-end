@@ -6,6 +6,7 @@ pipeline {
                 sh 'pwd'
                 sh 'ls'
                 script {
+                    ls
                     docker.build('xapsiel3301/mtaste_backend')
                 }
             }
