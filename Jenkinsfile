@@ -19,6 +19,8 @@ pipeline{
                         docker.image('xapsiel3301/mtaste_backend').push('latest')
                     }
                 }
+                sh 'pwd'
+                sh 'ls'
             }
         }
         stage('docker compose'){
