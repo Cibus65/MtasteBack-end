@@ -2,6 +2,7 @@ package main
 
 import (
 	"back-end/controllers"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -10,7 +11,10 @@ func RunServer() {
 
 	r.GET("Mtaste/API/getRecipeByPage/:page", (&controllers.RecipeController{}).GetRecipes)
 	r.GET("Mtaste/API/getRecipeByID/:id", (&controllers.RecipeController{}).GetRecipe)
-	r.Run("0.0.0.0:8080")
+	r.GET("Mtaste/API/findRecipe/:words", (&controllers.RecipeController{}).FindRecipe)
+	r.GET("Mtaste/API/getRandomRecipe", (&controllers.RecipeController{}).GetRandomRecipe)
+
+	r.Run("0.0.0.0:8082")
 }
 func main() {
 	RunServer()
