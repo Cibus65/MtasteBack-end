@@ -13,6 +13,8 @@ func RunServer() {
 	r.GET("Mtaste/API/getRecipeByID/:id", (&controllers.RecipeController{}).GetRecipe)
 	r.GET("Mtaste/API/findRecipe/:words", (&controllers.RecipeController{}).FindRecipe)
 	r.GET("Mtaste/API/getRandomRecipe", (&controllers.RecipeController{}).GetRandomRecipe)
+	r.POST("Mtaste/API/user/signUp/", (&controllers.UserController{}).SignUp)
+	r.POST("Mtaste/API/user/signIn/", (&controllers.UserController{}).SignIn)
 
 	r.Run("0.0.0.0:8082")
 }

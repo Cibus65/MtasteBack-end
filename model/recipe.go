@@ -106,7 +106,7 @@ func (r *Recipe) GetRandomRecipe() (Recipe, error) {
 }
 
 func getMaxID(collection *mongo.Collection) (int, error) {
-	//collection := config.MongoClient.Database("RecipeBook").Collection("recipe")
+	// collection := config.MongoClient.Database("RecipeBook").Collection("recipe")
 	filter := bson.D{}
 	opts := options.Find().SetSort(bson.D{{"unixtime", -1}, {"id", -1}})
 	cursor, err := collection.Find(context.TODO(), filter, opts)
