@@ -19,7 +19,6 @@ const (
 
 type User struct {
 	Login    string `json:"login" binding:"required"`
-	Email    string `json:"email"`
 	Password string `json:"password" binding:"required"`
 	ID       int    `json:"id"`
 }
@@ -41,50 +40,52 @@ func (u *User) GenerateJWT(user User) (string, error) {
 	return token.SignedString([]byte(signingKey))
 }
 
-func getUser(login string, password string) (User, error) {
+func getUser(login string, password string) (User, error,int) {
+	if  login == "" || password == "" {
+		return User{}, fmt.Errorf("Все данные должны быть заполнены!"),1
+	}
 	collection := config.MongoClient.Database("RecipeBook").Collection("users")
 	filter := bson.D{{"login", login}}
 	var exist User
 	_ = collection.FindOne(context.TODO(), filter).Decode(&exist)
-	if exist.Login == "" && exist.Password == "" && exist.Email == "" {
-		return User{}, fmt.Errorf("Пользователя не существует", login)
+	if exist.Login == "" && exist.Password == ""  {
+		return User{}, fmt.Errorf("Пользователя не существует: %s", login),3
 	} else if exist.Password != password {
-		return User{}, fmt.Errorf("Пароль неверный")
+		return User{}, fmt.Errorf("Пароль неверный"),4
 	} else {
-		return exist, nil
+		return exist, nil,0
 	}
 }
 
-func (u *User) CreateUser() (bool, error) {
-	u.Password = hashpasswd(u.Password)
-	_, flag, err := findUser(u.Email, u.Login)
-	if err != nil {
-		return false, err
+func (u *User) CreateUser() (bool, error,int) {
+	if  u.Login == "" || u.Password == "" {
+		return false, fmt.Errorf("Все данные должны быть заполнены!"),1
 	}
-	if u.Email == "" || u.Login == "" || u.Password == "" {
-		return false, fmt.Errorf("Все данные должны быть заполнены!")
+	u.Password = hashpasswd(u.Password)
+	
+	_, flag, err := findUser( u.Login)
+	if err != nil {
+		return false, err,100
 	}
 	if !flag {
 		collection := config.MongoClient.Database("RecipeBook").Collection("users")
 		u.ID = rand.Intn(1000_000_00) + 1000_000_00
 		collection.InsertOne(context.TODO(), u)
-		return true, nil
+		return true, nil,0
 	} else {
-		return false, fmt.Errorf("Такой пользователь уже существует")
+		return false, fmt.Errorf("Такой пользователь уже существует"),2
 	}
-	return true, nil
+	return true, nil,0
 }
 
-func findUser(email, login string) (User, bool, error) {
+func findUser(login string) (User, bool, error) {
 	collection := config.MongoClient.Database("RecipeBook").Collection("users")
 
-	cursor, err := collection.Find(context.TODO(), bson.D{{"email", email}, {"login", login}})
+	cursor, err := collection.Find(context.TODO(), bson.D{{"login", login}})
 	if err != nil {
 		return User{}, false, err
 	}
-	if err != nil {
-		return User{}, false, err
-	}
+ 
 	var user User
 	for cursor.Next(context.TODO()) {
 		if err = cursor.Decode(&user); err != nil {
@@ -98,13 +99,17 @@ func findUser(email, login string) (User, bool, error) {
 	}
 }
 
-func (u *User) SignIn() (string, error) {
+func (u *User) SignIn() (string, error,int) {
 	u.Password = hashpasswd(u.Password)
-	user, err := getUser(u.Login, u.Password)
+	user, err,code := getUser(u.Login, u.Password)
 	if err != nil {
-		return "", err
+		return "", err,code
 	}
-	return u.GenerateJWT(user)
+	jwt,err := u.GenerateJWT(user)
+	if err!=nil{
+		return "",err,100
+	}
+	return jwt,err,code
 
 }
 
@@ -166,7 +171,6 @@ func (u *User) AddUser(login, email, password string) string {
 	}
 	user.ID = rand.Intn(1000_000_000) + 1000_000_00
 	user.Login = login
-	user.Email = email
 	user.Password = password
 	collection.InsertOne(context.TODO(), user)
 	return "Пользователь зарегистрирован"

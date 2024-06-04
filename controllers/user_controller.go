@@ -11,12 +11,12 @@ import (
 type UserController struct{}
 
 func (_ *UserController) SignUp(c *gin.Context) {
+	fmt.Println(1)
 	var user model.User = model.User{
 		Login:    c.Query("login"),
 		Password: c.Query("password"),
-		Email:    c.Query("email"),
 	}
-	result, err := user.CreateUser()
+	result, err,code := user.CreateUser()
 	fmt.Print(result)
 
 	if err != nil {
@@ -25,6 +25,7 @@ func (_ *UserController) SignUp(c *gin.Context) {
 			"result": result,
 			"login":  user.Login,
 			"error":  fmt.Sprintf("%s", err),
+			"errorCode":code,
 		})
 	} else {
 		c.JSON(http.StatusOK, map[string]interface{}{
@@ -32,6 +33,8 @@ func (_ *UserController) SignUp(c *gin.Context) {
 			"result": result,
 			"login":  user.Login,
 			"error":  "",
+			"errorCode":code,
+
 		})
 	}
 }
@@ -40,18 +43,22 @@ func (_ *UserController) SignIn(c *gin.Context) {
 		Login:    c.Query("login"),
 		Password: c.Query("password"),
 	}
-	token, err := user.SignIn()
+	token, err,code := user.SignIn()
 	if err != nil {
 		c.JSON(http.StatusOK, map[string]interface{}{
 			"token": token,
 			"login": user.Login,
 			"error": fmt.Sprintf("%s", err),
+			"errorCode":code,
+
 		})
 	} else {
 		c.JSON(http.StatusOK, map[string]interface{}{
 			"token": token,
 			"login": user.Login,
 			"error": "",
+			"errorCode":code,
+
 		})
 	}
 

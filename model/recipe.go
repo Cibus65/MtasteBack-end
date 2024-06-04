@@ -17,9 +17,9 @@ type Recipe struct {
 	Description  map[int]string    `json:"description"`
 	Ingredients  map[string]string `json:"ingredients"`
 	ID           int               `json:"ID"`
-	Imgcardurl   string            `json:"imgcardurl"`
-	Imgwindowurl string            `json:"imgwindowurl"`
+	ImgWindowUrl string            `json:"imgwindowurl"`
 	UnixTime     int               `json:"unixTime"`
+	Synopsis 	string `json:"synopsis"`
 }
 
 func (r *Recipe) GetByPage(page int) ([]Recipe, error) {
