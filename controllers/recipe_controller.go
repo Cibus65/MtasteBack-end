@@ -29,9 +29,7 @@ func (_ *RecipeController) GetRecipes(c *gin.Context) {
 
 }
 func (_ *RecipeController) GetRecipe(c *gin.Context) {
-	c.Header("Access-Control-Allow-Origin", "*")                   // Разрешаем все домены
-	c.Header("Access-Control-Allow-Methods", "GET, POST, OPTIONS") // Разрешаем определенные методы
-	c.Header("Access-Control-Allow-Headers", "Content-Type")
+
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		c.Error(err)

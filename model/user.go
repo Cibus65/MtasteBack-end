@@ -73,3 +73,19 @@ func (u *User) DeleteFromFavourite() (FavouriteList, bool, error, int) {
 	_ = collection.FindOneAndReplace(context.Background(), bson.D{{"userid", u.UserId}}, userFavourite)
 	return userFavourite, true, nil, 0
 }
+
+func (u *User) GetFavouriteRecipes() ([]Recipe, error, int) {
+	userFavourite, err := findFavourite(u.UserId)
+	if err != nil {
+		return []Recipe{}, err, 100
+	}
+	var recipes []Recipe
+	for _, id := range userFavourite.Favourite {
+		recipe, err := (&Recipe{}).GetByID(id)
+		if err != nil {
+			return recipes, err, 100
+		}
+		recipes = append(recipes, recipe)
+	}
+	return recipes, nil, 0
+}
