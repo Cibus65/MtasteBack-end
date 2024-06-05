@@ -19,7 +19,7 @@ type Recipe struct {
 	ID           int               `json:"ID"`
 	ImgWindowUrl string            `json:"imgwindowurl"`
 	UnixTime     int               `json:"unixTime"`
-	Synopsis 	string `json:"synopsis"`
+	Synopsis     string            `json:"synopsis"`
 }
 
 func (r *Recipe) GetByPage(page int) ([]Recipe, error) {

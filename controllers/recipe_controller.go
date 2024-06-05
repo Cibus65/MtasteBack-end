@@ -17,7 +17,6 @@ func (_ *RecipeController) GetRecipes(c *gin.Context) {
 	c.Header("Access-Control-Allow-Methods", "GET, POST, OPTIONS") // Разрешаем определенные методы
 	c.Header("Access-Control-Allow-Headers", "Content-Type")       //Разрешаем определенные заголовки
 
-	
 	var recipe model.Recipe
 	page, err := strconv.Atoi(c.Param("page"))
 	if err != nil {
@@ -25,7 +24,7 @@ func (_ *RecipeController) GetRecipes(c *gin.Context) {
 
 	}
 	recipes, err := recipe.GetByPage(page)
-	if err!=nil{
+	if err != nil {
 		c.JSON(http.StatusNotFound, err)
 
 	}
