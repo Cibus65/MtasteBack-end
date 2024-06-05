@@ -11,13 +11,17 @@ import (
 type AuthController struct{}
 
 func (_ *AuthController) SignUp(c *gin.Context) {
-
-	var user model.Auth = model.Auth{
-		Login:         c.Query("login"),
-		Password:      c.Query("password"),
-		RetryPassword: c.Query("retry_password"),
+	var user_interface interface{}
+	c.Bind(&user_interface)
+	new := user_interface.(map[string]interface{})
+	var user = model.Auth{
+		Login:         new["login"].(string),
+		Password:      new["password"].(string),
+		RetryPassword: new["retry_password"].(string),
 	}
+
 	result, err, code := user.CreateUser()
+	fmt.Println(result, user, "\n\n")
 
 	if err != nil {
 		c.JSON(http.StatusOK, map[string]interface{}{
