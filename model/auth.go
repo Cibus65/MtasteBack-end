@@ -59,11 +59,9 @@ func getUser(login string, password string) (Auth, error, int) {
 }
 
 func (a *Auth) CreateUser() (bool, error, int) {
-	fmt.Println(a)
 	if a.Login == "" || a.Password == "" || a.RetryPassword == "" {
 		return false, fmt.Errorf("Все данные должны быть заполнены!"), 1
 	}
-	fmt.Println(1)
 
 	if a.Password != a.RetryPassword {
 		return false, fmt.Errorf("Пароли должны быть одинаковыми"), 5
@@ -82,7 +80,6 @@ func (a *Auth) CreateUser() (bool, error, int) {
 	} else {
 		return false, fmt.Errorf("Такой пользователь уже существует"), 2
 	}
-	return true, nil, 0
 }
 
 func findUser(login string) (Auth, bool, error) {

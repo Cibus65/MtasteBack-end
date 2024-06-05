@@ -13,9 +13,6 @@ import (
 type RecipeController struct{}
 
 func (_ *RecipeController) GetRecipes(c *gin.Context) {
-	c.Header("Access-Control-Allow-Origin", "*")                   // Разрешаем все домены
-	c.Header("Access-Control-Allow-Methods", "GET, POST, OPTIONS") // Разрешаем определенные методы
-	c.Header("Access-Control-Allow-Headers", "Content-Type")       //Разрешаем определенные заголовки
 
 	var recipe model.Recipe
 	page, err := strconv.Atoi(c.Param("page"))
@@ -49,9 +46,6 @@ func (_ *RecipeController) GetRecipe(c *gin.Context) {
 
 }
 func (_ *RecipeController) FindRecipe(c *gin.Context) {
-	c.Header("Access-Control-Allow-Origin", "*")                   // Разрешаем все домены
-	c.Header("Access-Control-Allow-Methods", "GET, POST, OPTIONS") // Разрешаем определенные методы
-	c.Header("Access-Control-Allow-Headers", "Content-Type")
 	words := c.Param("words")
 	words = strings.Replace(words, "+", " ", -1)
 	recipes, err := (&model.Recipe{}).FindRecipe(words)
@@ -65,9 +59,6 @@ func (_ *RecipeController) FindRecipe(c *gin.Context) {
 
 func (_ *RecipeController) GetRandomRecipe(c *gin.Context) {
 
-	c.Header("Access-Control-Allow-Origin", "*")                   // Разрешаем все домены
-	c.Header("Access-Control-Allow-Methods", "GET, POST, OPTIONS") // Разрешаем определенные методы
-	c.Header("Access-Control-Allow-Headers", "Content-Type")
 	recipe, err := (&model.Recipe{}).GetRandomRecipe()
 	if err != nil {
 		log.Printf("Failed to get random recipe: \n\tERROR: %s", err)

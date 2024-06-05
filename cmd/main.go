@@ -8,15 +8,6 @@ import (
 
 func RunServer() {
 	r := gin.Default()
-	//recipe breakpoints
-	r.GET("Mtaste/API/getRecipeByPage/:page", (&controllers.RecipeController{}).GetRecipes)
-	r.GET("Mtaste/API/getRecipeByID/:id", (&controllers.RecipeController{}).GetRecipe)
-	r.GET("Mtaste/API/findRecipe/:words", (&controllers.RecipeController{}).FindRecipe)
-	r.GET("Mtaste/API/getRandomRecipe", (&controllers.RecipeController{}).GetRandomRecipe)
-
-	//auth breakpoints
-	r.POST("Mtaste/API/auth/signUp", (&controllers.AuthController{}).SignUp)
-	r.POST("Mtaste/API/auth/signIn", (&controllers.AuthController{}).SignIn)
 	r.Use(func(c *gin.Context) {
 		c.Header("Access-Control-Allow-Origin", "*")
 		c.Header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
@@ -29,6 +20,16 @@ func RunServer() {
 
 		c.Next()
 	})
+	//recipe breakpoints
+	r.GET("Mtaste/API/getRecipeByPage/:page", (&controllers.RecipeController{}).GetRecipes)
+	r.GET("Mtaste/API/getRecipeByID/:id", (&controllers.RecipeController{}).GetRecipe)
+	r.GET("Mtaste/API/findRecipe/:words", (&controllers.RecipeController{}).FindRecipe)
+	r.GET("Mtaste/API/getRandomRecipe", (&controllers.RecipeController{}).GetRandomRecipe)
+
+	//auth breakpoints
+	r.POST("Mtaste/API/auth/signUp", (&controllers.AuthController{}).SignUp)
+	r.POST("Mtaste/API/auth/signIn", (&controllers.AuthController{}).SignIn)
+
 	//user breakpoints
 
 	r.POST("Mtaste/API/user/addToFavourite", (&controllers.UserController{}).AddToFavourite)

@@ -12,9 +12,6 @@ import (
 type UserController struct{}
 
 func (_ *UserController) AddToFavourite(c *gin.Context) {
-	c.Header("Access-Control-Allow-Origin", "*")                       // Разрешаем все домены
-	c.Header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE") // Разрешаем определенные методы
-	c.Header("Access-Control-Allow-Headers", "Content-Type")           //Разрешаем определенные заголовки
 	userid, _ := strconv.Atoi(c.Query("userID"))
 	recipeid, _ := strconv.Atoi(c.Query("recipeID"))
 	var user = model.User{
