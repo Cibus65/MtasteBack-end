@@ -6,6 +6,7 @@ import (
 	"crypto/sha1"
 	"fmt"
 	"math/rand"
+	"strings"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -13,8 +14,9 @@ import (
 )
 
 const (
-	salt       = "tklw12hfoiv3pjihu5u521jofc29urji"
-	signingKey = "gag2rp1jkr21fvi0jio2jqfwcpkkngjy2t0tfp"
+	salt          = "tklw12hfoiv3pjihu5u521jofc29urji"
+	signingKey    = "gag2rp1jkr21fvi0jio2jqfwcpkkngjy2t0tfp"
+	valid_symbols = "abcdefghijklmnopqrstuvwxyz0123456789"
 )
 
 type Auth struct {
@@ -62,7 +64,13 @@ func (a *Auth) CreateUser() (bool, error, int) {
 	if a.Login == "" || a.Password == "" || a.RetryPassword == "" {
 		return false, fmt.Errorf("Все данные должны быть заполнены!"), 1
 	}
+	if !password_valid(a.Password) || !password_valid(a.RetryPassword) {
+		return false, fmt.Errorf("Пароль должен быть не короче 8 символов, не длиннее 50, содержать хотя бы одну цифру и латинскую букву, не содержать другие спец.символы кроме \"_\""), 8
+	}
 
+	if !login_valid(a.Login) {
+		return false, fmt.Errorf("Логин должен быть не короче 8 символов, не длиннее 50, содержать хотя бы одну латинскую букву,не содержать другие спец.символы кроме \"_\" и цифр"), 9
+	}
 	if a.Password != a.RetryPassword {
 		return false, fmt.Errorf("Пароли должны быть одинаковыми"), 5
 	}
@@ -179,4 +187,45 @@ func (a *Auth) AddUser(login, email, password string) string {
 	collection.InsertOne(context.TODO(), user)
 	return "Пользователь зарегистрирован"
 
+}
+
+func password_valid(password string) bool {
+	countDigit, countChar, countUnderline := 0, 0, 0
+	for index := range password {
+
+		if strings.Contains("0123456789", string(password[index])) {
+			countDigit++
+		} else if strings.Contains(valid_symbols, string(password[index])) {
+			countChar++
+		} else if string(password[index]) == "_" {
+			countUnderline++
+		} else {
+			return false
+		}
+	}
+	if countChar+countDigit+countUnderline <= 50 && countChar+countDigit+countUnderline >= 8 && countDigit > 0 && countChar > 0 {
+		return true
+	} else {
+		return false
+	}
+}
+func login_valid(login string) bool {
+	countDigit, countChar, countUnderline := 0, 0, 0
+	for index := range login {
+
+		if strings.Contains("0123456789", string(login[index])) {
+			countDigit++
+		} else if strings.Contains(valid_symbols, string(login[index])) {
+			countChar++
+		} else if string(login[index]) == "_" {
+			countUnderline++
+		} else {
+			return false
+		}
+	}
+	if countChar+countDigit+countUnderline <= 50 && countChar+countDigit+countUnderline >= 8 && countChar > 0 {
+		return true
+	} else {
+		return false
+	}
 }

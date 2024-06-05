@@ -33,6 +33,7 @@ func RunServer() {
 	//user breakpoints
 
 	r.POST("Mtaste/API/user/addToFavourite", (&controllers.UserController{}).AddToFavourite)
+	r.POST("Mtaste/API/user/deleteFromFavourite", (&controllers.UserController{}).DeleteFromFavourite)
 	r.Run("0.0.0.0:8082")
 }
 func main() {
