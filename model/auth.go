@@ -59,6 +59,7 @@ func getUser(login string, password string) (Auth, error, int) {
 }
 
 func (a *Auth) CreateUser() (bool, error, int) {
+	fmt.Println(a)
 	if a.Login == "" || a.Password == "" || a.RetryPassword == "" {
 		return false, fmt.Errorf("Все данные должны быть заполнены!"), 1
 	}

@@ -11,10 +11,8 @@ import (
 type AuthController struct{}
 
 func (_ *AuthController) SignUp(c *gin.Context) {
-	c.Header("Access-Control-Allow-Origin", "*")                   // Разрешаем все домены
-	c.Header("Access-Control-Allow-Methods", "GET, POST, OPTIONS") // Разрешаем определенные методы
-	c.Header("Access-Control-Allow-Headers", "Content-Type")       //Разрешаем определенные заголовки
-	fmt.Println(1)
+	fmt.Println(1111)
+
 	var user model.Auth = model.Auth{
 		Login:         c.Query("login"),
 		Password:      c.Query("password"),
