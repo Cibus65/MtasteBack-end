@@ -42,10 +42,14 @@ func (_ *AuthController) SignUp(c *gin.Context) {
 	}
 }
 func (_ *AuthController) SignIn(c *gin.Context) {
-	var user model.Auth = model.Auth{
-		Login:    c.Query("login"),
-		Password: c.Query("password"),
+	var user_interface interface{}
+	c.Bind(&user_interface)
+	new := user_interface.(map[string]interface{})
+	var user = model.Auth{
+		Login:    new["login"].(string),
+		Password: new["password"].(string),
 	}
+
 	token, err, code := user.SignIn()
 	if err != nil {
 		c.JSON(http.StatusOK, map[string]interface{}{
