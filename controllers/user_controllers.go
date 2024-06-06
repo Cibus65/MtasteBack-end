@@ -31,7 +31,7 @@ func (_ *UserController) AddToFavourite(c *gin.Context) {
 			"errorCode": code,
 		})
 	} else {
-		c.JSON(http.StatusOK, map[string]interface{}{
+		c.JSON(404, map[string]interface{}{
 			"result":    result,
 			"flag":      flag,
 			"userID":    user.UserId,
@@ -61,7 +61,7 @@ func (_ *UserController) DeleteFromFavourite(c *gin.Context) {
 			"errorCode": code,
 		})
 	} else {
-		c.JSON(http.StatusOK, map[string]interface{}{
+		c.JSON(404, map[string]interface{}{
 			"result":    result,
 			"flag":      flag,
 			"userID":    user.UserId,
@@ -75,7 +75,7 @@ func (_ *UserController) GetFavouriteRecipes(c *gin.Context) {
 
 	userid, err := strconv.Atoi(c.Param("userID"))
 	if err != nil {
-		c.JSON(http.StatusOK, map[string]interface{}{
+		c.JSON(http.404, map[string]interface{}{
 			"error":     err,
 			"errorCode": 100,
 			"recipes":   []model.Recipe{},
