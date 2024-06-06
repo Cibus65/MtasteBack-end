@@ -111,17 +111,18 @@ func findUser(login string) (Auth, bool, error) {
 	}
 }
 
-func (a *Auth) SignIn() (string, error, int) {
+func (a *Auth) SignIn() (string, error, int,int) {
 	a.Password = hashpasswd(a.Password)
+	a.RetryPassword = hashpasswd(a.RetryPassword)
 	user, err, code := getUser(a.Login, a.Password)
 	if err != nil {
-		return "", err, code
+		return "", err, code,0
 	}
 	jwt, err := a.GenerateJWT(user)
 	if err != nil {
-		return "", err, 100
+		return "", err, 100,0
 	}
-	return jwt, err, code
+	return jwt, err, code,user.ID
 
 }
 
@@ -171,23 +172,7 @@ func hashpasswd(password string) string {
 //	}
 //	return fmt.Sprintf("Рецепт с ID[ %d ] был добавлен", recipeID), nil
 //}
-
-func (a *Auth) AddUser(login, email, password string) string {
-	collection := config.MongoClient.Database("Users").Collection("users")
-	filter := bson.D{{"login", login}}
-	var user Auth
-	us := collection.FindOne(context.TODO(), filter)
-	us.Decode(&user)
-	if user.ID != 0 {
-		return "Пользователь с таким ником уже существует"
-	}
-	user.ID = rand.Intn(1000_000_000) + 1000_000_00
-	user.Login = login
-	user.Password = password
-	collection.InsertOne(context.TODO(), user)
-	return "Пользователь зарегистрирован"
-
-}
+ 
 
 func password_valid(password string) bool {
 	countDigit, countChar, countUnderline := 0, 0, 0

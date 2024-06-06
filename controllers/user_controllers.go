@@ -12,12 +12,12 @@ import (
 type UserController struct{}
 
 func (_ *UserController) AddToFavourite(c *gin.Context) {
-	var user_interface interface{}
-	c.Bind(&user_interface)
-	new := user_interface.(map[string]interface{})
+	userid, _ := strconv.Atoi(c.Query("userID"))
+	recipeid, _ := strconv.Atoi(c.Query("recipeID"))
+
 	var user = model.User{
-		UserId:   int(new["userId"].(float64)),
-		RecipeID: int(new["recipeId"].(float64)),
+		UserId:   userid,
+		RecipeID:recipeid,
 	}
 
 	result, flag, err, code := user.AddToFavourite()
@@ -43,12 +43,11 @@ func (_ *UserController) AddToFavourite(c *gin.Context) {
 
 func (_ *UserController) DeleteFromFavourite(c *gin.Context) {
 
-	var user_interface interface{}
-	c.Bind(&user_interface)
-	new := user_interface.(map[string]interface{})
+	userid, _ := strconv.Atoi(c.Query("userID"))
+	recipeid, _ := strconv.Atoi(c.Query("recipeID"))
 	var user = model.User{
-		UserId:   int(new["userId"].(float64)),
-		RecipeID: int(new["recipeId"].(float64)),
+		UserId:   userid,
+		RecipeID: recipeid,
 	}
 
 	result, flag, err, code := user.DeleteFromFavourite()
