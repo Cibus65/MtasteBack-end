@@ -28,4 +28,4 @@ jobs:
         context: .
         file: ./Dockerfile
         push: true
-        tags: ${{ secrets.DOCKER_USERNAME }}/my-golang-app:latest
+        tags: ${{ secrets.DOCKER_USERNAME }}/mtaste_backend:latest
