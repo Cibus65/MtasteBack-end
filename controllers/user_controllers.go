@@ -17,7 +17,7 @@ func (_ *UserController) AddToFavourite(c *gin.Context) {
 
 	var user = model.User{
 		UserId:   userid,
-		RecipeID:recipeid,
+		RecipeID: recipeid,
 	}
 
 	result, flag, err, code := user.AddToFavourite()
@@ -75,7 +75,7 @@ func (_ *UserController) GetFavouriteRecipes(c *gin.Context) {
 
 	userid, err := strconv.Atoi(c.Param("userID"))
 	if err != nil {
-		c.JSON(http.404, map[string]interface{}{
+		c.JSON(404, map[string]interface{}{
 			"error":     err,
 			"errorCode": 100,
 			"recipes":   []model.Recipe{},

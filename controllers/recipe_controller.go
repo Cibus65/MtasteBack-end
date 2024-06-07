@@ -57,11 +57,11 @@ func (_ *RecipeController) FindRecipe(c *gin.Context) {
 
 func (_ *RecipeController) GetRandomRecipe(c *gin.Context) {
 
-	recipe, err := (&model.Recipe{}).GetRandomRecipe()
+	recipes, err := (&model.Recipe{}).GetRandomRecipe()
 	if err != nil {
 		log.Printf("Failed to get random recipe: \n\tERROR: %s", err)
 		c.JSON(http.StatusNotFound, nil)
 
 	}
-	c.JSON(http.StatusOK, recipe)
+	c.JSON(http.StatusOK, recipes)
 }

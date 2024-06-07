@@ -4,7 +4,7 @@ import (
 	"back-end/config"
 	"context"
 	"math/rand"
-
+	"slices"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -88,20 +88,31 @@ func (r *Recipe) FindRecipe(words string) ([]Recipe, error) {
 	return recipes, nil
 }
 
-func (r *Recipe) GetRandomRecipe() (Recipe, error) {
+func (r *Recipe) GetRandomRecipe() ([]Recipe, error) {
 	collection := config.MongoClient.Database("RecipeBook").Collection("recipes")
 	maxID, err := getMaxID(collection)
 	if err != nil {
-		return Recipe{}, err
+		return []Recipe{}, err
 	}
-	randNum := rand.Intn(maxID) + 1
-	doc := collection.FindOne(context.TODO(), bson.D{{"id", randNum}})
-	var recipe Recipe
-	err = doc.Decode(&recipe)
-	if err != nil {
-		return Recipe{}, err
+	var randomNumArray []int
+	for len(randomNumArray) != 3{
+		randNum := rand.Intn(maxID) + 1
+		if !slices.Contains(randomNumArray,randNum){
+			randomNumArray = append(randomNumArray, randNum)
+		}
 	}
-	return recipe, nil
+	var recipes []Recipe
+	for index :=range randomNumArray{
+		doc := collection.FindOne(context.TODO(), bson.D{{"id", randomNumArray[index]}})
+		var recipe Recipe
+		err = doc.Decode(&recipe)
+		if err != nil {
+			return []Recipe{}, err
+		}	
+		recipes = append(recipes, recipe)
+
+	}
+	return recipes, nil
 
 }
 
