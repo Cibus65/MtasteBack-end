@@ -1,4 +1,4 @@
-FROM golang:1.22.1
+FROM golang:1.22.3
 ENV GIN_MODE=release
 
 WORKDIR /app
@@ -11,5 +11,5 @@ RUN go mod download
 RUN go build -o ../main ./cmd/main.go
 
 
-EXPOSE 8080
+EXPOSE 8082
 CMD ["../main"]
