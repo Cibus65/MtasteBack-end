@@ -10,6 +10,13 @@ COPY / .
 RUN go mod download
 RUN go build -o ../main ./cmd/main.go
 
+FROM nginx:alpine
 
-EXPOSE 8082
-CMD ["../main"]
+# Копирование собранного приложения в каталог html Nginx
+COPY --from=build-stage ../main /usr/share/nginx/html
+
+# Открытие порта 80
+EXPOSE 80
+
+CMD ["nginx", "-g", "daemon off;"]
+

@@ -5,6 +5,7 @@ import (
 	"context"
 	"math/rand"
 	"slices"
+
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -95,20 +96,20 @@ func (r *Recipe) GetRandomRecipe() ([]Recipe, error) {
 		return []Recipe{}, err
 	}
 	var randomNumArray []int
-	for len(randomNumArray) != 3{
+	for len(randomNumArray) != 3 {
 		randNum := rand.Intn(maxID) + 1
-		if !slices.Contains(randomNumArray,randNum){
+		if !slices.Contains(randomNumArray, randNum) {
 			randomNumArray = append(randomNumArray, randNum)
 		}
 	}
 	var recipes []Recipe
-	for index :=range randomNumArray{
+	for index := range randomNumArray {
 		doc := collection.FindOne(context.TODO(), bson.D{{"id", randomNumArray[index]}})
 		var recipe Recipe
 		err = doc.Decode(&recipe)
 		if err != nil {
 			return []Recipe{}, err
-		}	
+		}
 		recipes = append(recipes, recipe)
 
 	}
@@ -117,7 +118,6 @@ func (r *Recipe) GetRandomRecipe() ([]Recipe, error) {
 }
 
 func getMaxID(collection *mongo.Collection) (int, error) {
-	// collection := config.MongoClient.Database("RecipeBook").Collection("recipe")
 	filter := bson.D{}
 	opts := options.Find().SetSort(bson.D{{"unixtime", -1}, {"id", -1}})
 	cursor, err := collection.Find(context.TODO(), filter, opts)
