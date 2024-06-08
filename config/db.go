@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"os"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -13,12 +12,9 @@ import (
 var MongoClient *mongo.Client
 
 func init() {
-	file, err := os.OpenFile("../app.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
-	log.SetOutput(file)
-	if err != nil {
-		panic(err)
-	}
-	err = ConnectToDB()
+
+	err := ConnectToDB()
+	fmt.Println(err, "0")
 	if err != nil {
 		log.Fatalf("Failed connection to MongoDB:\n\t", err)
 	}
