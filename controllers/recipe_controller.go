@@ -17,12 +17,14 @@ func (_ *RecipeController) GetRecipes(c *gin.Context) {
 
 	var recipe model.Recipe
 	page, err := strconv.Atoi(c.Param("page"))
-	fmt.Println(err)
+	fmt.Println(err, "2")
 	if err != nil {
 		c.JSON(http.StatusNotFound, err)
 
 	}
 	recipes, err := recipe.GetByPage(page)
+
+	fmt.Println(err, "3")
 	if err != nil {
 		c.JSON(http.StatusNotFound, err)
 

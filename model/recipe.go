@@ -3,6 +3,7 @@ package model
 import (
 	"back-end/config"
 	"context"
+	"fmt"
 	"math/rand"
 	"slices"
 
@@ -29,7 +30,10 @@ func (r *Recipe) GetByPage(page int) ([]Recipe, error) {
 
 	var recipes []Recipe
 	max_id, err := getMaxID(collection)
+	fmt.Println(err, "4")
+
 	if err != nil {
+
 		return []Recipe{}, err
 	}
 	cursor, err := collection.Find(context.TODO(), bson.D{{"id", bson.D{{"$gte", max_id + 1 - page*20}}}})
@@ -72,6 +76,8 @@ func (r *Recipe) FindRecipe(words string) ([]Recipe, error) {
 	//collection := config.MongoClient.Database("RecipeBook").Collection("recipe")
 	filter := bson.M{"name": bson.M{"$regex": words, "$options": "i"}}
 	cursor, err := collection.Find(context.TODO(), filter)
+	fmt.Println(err, "7")
+
 	if err != nil {
 		return []Recipe{}, err
 	}
