@@ -24,7 +24,7 @@ func init() {
 }
 func ConnectToDB() error {
 	serverAPI := options.ServerAPI(options.ServerAPIVersion1)
-	opts := options.Client().ApplyURI("mongodb://localhost:27017").SetServerAPIOptions(serverAPI)
+	opts := options.Client().ApplyURI("mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.2.6").SetServerAPIOptions(serverAPI)
 	client, err := mongo.Connect(context.Background(), opts)
 	if err != nil {
 		return err
