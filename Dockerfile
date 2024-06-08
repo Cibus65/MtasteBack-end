@@ -1,4 +1,5 @@
 FROM golang:1.22.3
+ENV GIN_MODE=release
 
 WORKDIR /app
 COPY go.mod .

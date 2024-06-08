@@ -35,7 +35,7 @@ func RunServer() {
 	r.POST("Mtaste/API/user/addToFavourite", (&controllers.UserController{}).AddToFavourite)
 	r.POST("Mtaste/API/user/deleteFromFavourite", (&controllers.UserController{}).DeleteFromFavourite)
 	r.GET("Mtaste/API/user/getFavouriteRecipes/:userID", (&controllers.UserController{}).GetFavouriteRecipes)
-	r.Run("localhost:8082")
+	r.Run(":8082")
 }
 func main() {
 	RunServer()
