@@ -13,7 +13,7 @@ RUN go build -o ../main ./cmd/main.go
 FROM nginx:alpine
 
 # Копирование собранного приложения в каталог html Nginx
-COPY --from=build-stage ../main /usr/share/nginx/html
+COPY --from=build-stage /app/main /usr/share/nginx/html
 
 # Открытие порта 80
 EXPOSE 80
