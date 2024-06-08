@@ -1,3 +1,4 @@
+# Многоступенчатая сборка
 FROM golang:1.22.3 AS builder
 ENV GIN_MODE=release
 
@@ -8,8 +9,8 @@ RUN go mod download
 COPY . ./
 RUN go build -o /main ./cmd/main.go
 
-# Создание финального минимального образа
-FROM gcr.io/distroless/base-debian10
+# Финальный образ с необходимыми библиотеками
+FROM debian:bookworm-slim
 COPY --from=builder /main /main
 
 EXPOSE 8082
