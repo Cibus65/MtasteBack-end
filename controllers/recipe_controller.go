@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"back-end/model"
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
@@ -16,6 +17,7 @@ func (_ *RecipeController) GetRecipes(c *gin.Context) {
 
 	var recipe model.Recipe
 	page, err := strconv.Atoi(c.Param("page"))
+	fmt.Println(err)
 	if err != nil {
 		c.JSON(http.StatusNotFound, err)
 
