@@ -24,7 +24,7 @@ type Recipe struct {
 	IsFavourite  bool              `json:"isFavourite"`
 }
 
-func (r *Recipe) GetByPage(page int, userid int) ([]Recipe, error) {
+func (r *Recipe) GetByPage(page int) ([]Recipe, error) {
 	collection := config.MongoClient.Database("RecipeBook").Collection("recipes")
 	//collection := config.MongoClient.Database("RecipeBook").Collection("recipe")
 
@@ -49,7 +49,6 @@ func (r *Recipe) GetByPage(page int, userid int) ([]Recipe, error) {
 			break
 		}
 	}
-	recipes, err, _ = checkIsFavourite(recipes, userid)
 	if err != nil {
 		return []Recipe{}, err
 	}
@@ -68,7 +67,7 @@ func (r *Recipe) GetByIDclassic(id int) (Recipe, error) {
 	return recipe, nil
 }
 
-func (r *Recipe) GetByID(id int, userid int) (Recipe, error) {
+func (r *Recipe) GetByID(id int) (Recipe, error) {
 	var recipe Recipe
 	collection := config.MongoClient.Database("RecipeBook").Collection("recipes")
 	//collection := config.MongoClient.Database("RecipeBook").Collection("recipe")
@@ -78,17 +77,14 @@ func (r *Recipe) GetByID(id int, userid int) (Recipe, error) {
 	if err != nil {
 		return Recipe{}, err
 	}
-	recipes, err, _ := checkIsFavourite([]Recipe{recipe}, userid)
-	if err != nil {
-		return Recipe{}, err
-	}
-	return recipes[0], nil
+
+	return recipe, nil
 }
 
 // func (r *Recipe) getByCategory(category string, page int) {
 //
 // }
-func (r *Recipe) FindRecipe(words string, userid int) ([]Recipe, error) {
+func (r *Recipe) FindRecipe(words string) ([]Recipe, error) {
 	collection := config.MongoClient.Database("RecipeBook").Collection("recipes")
 	//collection := config.MongoClient.Database("RecipeBook").Collection("recipe")
 	filter := bson.M{"name": bson.M{"$regex": words, "$options": "i"}}
@@ -107,14 +103,10 @@ func (r *Recipe) FindRecipe(words string, userid int) ([]Recipe, error) {
 		recipes = append(recipes, recipe)
 
 	}
-	recipes, err, _ = checkIsFavourite(recipes, userid)
-	if err != nil {
-		return []Recipe{}, err
-	}
 	return recipes, nil
 }
 
-func (r *Recipe) GetRandomRecipe(userid int) ([]Recipe, error) {
+func (r *Recipe) GetRandomRecipe() ([]Recipe, error) {
 	collection := config.MongoClient.Database("RecipeBook").Collection("recipes")
 	maxID, err := getMaxID(collection)
 	if err != nil {
@@ -137,10 +129,6 @@ func (r *Recipe) GetRandomRecipe(userid int) ([]Recipe, error) {
 		}
 		recipes = append(recipes, recipe)
 
-	}
-	recipes, err, _ = checkIsFavourite(recipes, userid)
-	if err != nil {
-		return []Recipe{}, err
 	}
 	return recipes, nil
 
@@ -169,26 +157,25 @@ func getMaxID(collection *mongo.Collection) (int, error) {
 
 }
 
-func checkIsFavourite(recipes []Recipe, userid int) ([]Recipe, error, int) {
-	user := User{UserId: userid}
-	favourite, err, code := user.GetFavouriteRecipes()
+// func checkIsFavourite(recipes []Recipe) ([]Recipe, error, int) {
+// 	favourite, err, code := user.GetFavouriteRecipes()
 
-	for index, recipe := range recipes {
-		if contain(favourite, &recipe) {
-			recipes[index].IsFavourite = true
-		} else {
-			recipes[index].IsFavourite = false
-		}
-	}
-	return recipes, err, code
+// 	for index, recipe := range recipes {
+// 		if contain(favourite, &recipe) {
+// 			recipes[index].IsFavourite = true
+// 		} else {
+// 			recipes[index].IsFavourite = false
+// 		}
+// 	}
+// 	return recipes, err, code
 
-}
+// }
 
-func contain(recipes []Recipe, recipe *Recipe) bool {
-	for _, rec := range recipes {
-		if rec.ID == recipe.ID {
-			return true
-		}
-	}
-	return false
-}
+// func contain(recipes []Recipe, recipe *Recipe) bool {
+// 	for _, rec := range recipes {
+// 		if rec.ID == recipe.ID {
+// 			return true
+// 		}
+// 	}
+// 	return false
+// }
