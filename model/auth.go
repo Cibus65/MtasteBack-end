@@ -16,7 +16,7 @@ import (
 const (
 	salt          = "tklw12hfoiv3pjihu5u521jofc29urji"
 	signingKey    = "gag2rp1jkr21fvi0jio2jqfwcpkkngjy2t0tfp"
-	valid_symbols = "abcdefghijklmnopqrstuvwxyz0123456789"
+	valid_symbols = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
 )
 
 type Auth struct {
@@ -111,18 +111,18 @@ func findUser(login string) (Auth, bool, error) {
 	}
 }
 
-func (a *Auth) SignIn() (string, error, int,int) {
+func (a *Auth) SignIn() (string, error, int, int) {
 	a.Password = hashpasswd(a.Password)
 	a.RetryPassword = hashpasswd(a.RetryPassword)
 	user, err, code := getUser(a.Login, a.Password)
 	if err != nil {
-		return "", err, code,0
+		return "", err, code, 0
 	}
 	jwt, err := a.GenerateJWT(user)
 	if err != nil {
-		return "", err, 100,0
+		return "", err, 100, 0
 	}
-	return jwt, err, code,user.ID
+	return jwt, err, code, user.ID
 
 }
 
@@ -172,7 +172,6 @@ func hashpasswd(password string) string {
 //	}
 //	return fmt.Sprintf("Рецепт с ID[ %d ] был добавлен", recipeID), nil
 //}
- 
 
 func password_valid(password string) bool {
 	countDigit, countChar, countUnderline := 0, 0, 0
