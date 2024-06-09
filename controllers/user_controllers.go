@@ -15,6 +15,9 @@ func (_ *UserController) AddToFavourite(c *gin.Context) {
 	var user_interface interface{}
 	c.Bind(&user_interface)
 	new := user_interface.(map[string]interface{})
+	if new["userID"] == nil {
+		new["userID"] = 162758239.
+	}
 	var user = model.User{
 		UserId:   int(new["userID"].(float64)),
 		RecipeID: int(new["recipeID"].(float64)),
@@ -46,6 +49,9 @@ func (_ *UserController) DeleteFromFavourite(c *gin.Context) {
 	var user_interface interface{}
 	c.Bind(&user_interface)
 	new := user_interface.(map[string]interface{})
+	if new["userID"] == nil {
+		new["userID"] = 162758239.
+	}
 	var user = model.User{
 		UserId:   int(new["userID"].(float64)),
 		RecipeID: int(new["recipeID"].(float64)),
@@ -76,6 +82,9 @@ func (_ *UserController) GetFavouriteRecipes(c *gin.Context) {
 	var user_interface interface{}
 	c.Bind(&user_interface)
 	new := user_interface.(map[string]interface{})
+	if new["userID"] == nil {
+		new["userID"] = 162758239.
+	}
 	var user = model.User{
 		UserId:   int(new["userID"].(float64)),
 		RecipeID: 0,
