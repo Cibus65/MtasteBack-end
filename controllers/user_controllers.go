@@ -24,7 +24,7 @@ func (_ *UserController) Favourite(c *gin.Context) {
 	}
 	result, flag, err, code := user.Favourite()
 
-	if err != nil {
+	if err != nil && !flag {
 		c.JSON(404, map[string]interface{}{
 			"result":    result,
 			"flag":      flag,

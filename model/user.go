@@ -3,6 +3,7 @@ package model
 import (
 	"back-end/config"
 	"context"
+	"fmt"
 	"slices"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -30,14 +31,14 @@ func (u *User) Favourite() (FavouriteList, bool, error, int) {
 		}
 		userFavourite.Favourite = new_favourite
 		_ = collection.FindOneAndReplace(context.Background(), bson.D{{"userid", u.UserId}}, userFavourite)
-		return userFavourite, true, nil, 0
+		return userFavourite, true, fmt.Errorf("Рецепт удален из избранного"), -10
 	}
 	if err != nil {
 		return FavouriteList{}, false, err, 100
 	}
 	userFavourite.Favourite = append(userFavourite.Favourite, u.RecipeID)
 	_ = collection.FindOneAndReplace(context.Background(), bson.D{{"userid", u.UserId}}, userFavourite)
-	return userFavourite, true, nil, 0
+	return userFavourite, true, fmt.Errorf("Рецепт добавлен в избранное"), 10
 }
 
 func findFavourite(userID int) (FavouriteList, error) {
