@@ -4,7 +4,6 @@ import (
 	"back-end/model"
 	"fmt"
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -12,12 +11,13 @@ import (
 type UserController struct{}
 
 func (_ *UserController) AddToFavourite(c *gin.Context) {
-	userid, _ := strconv.Atoi(c.Query("userID"))
-	recipeid, _ := strconv.Atoi(c.Query("recipeID"))
 
+	var user_interface interface{}
+	c.Bind(&user_interface)
+	new := user_interface.(map[string]interface{})
 	var user = model.User{
-		UserId:   userid,
-		RecipeID: recipeid,
+		UserId:   int(new["userID"].(float64)),
+		RecipeID: int(new["recipeID"].(float64)),
 	}
 
 	result, flag, err, code := user.AddToFavourite()
@@ -43,11 +43,12 @@ func (_ *UserController) AddToFavourite(c *gin.Context) {
 
 func (_ *UserController) DeleteFromFavourite(c *gin.Context) {
 
-	userid, _ := strconv.Atoi(c.Query("userID"))
-	recipeid, _ := strconv.Atoi(c.Query("recipeID"))
+	var user_interface interface{}
+	c.Bind(&user_interface)
+	new := user_interface.(map[string]interface{})
 	var user = model.User{
-		UserId:   userid,
-		RecipeID: recipeid,
+		UserId:   int(new["userID"].(float64)),
+		RecipeID: int(new["recipeID"].(float64)),
 	}
 
 	result, flag, err, code := user.DeleteFromFavourite()
@@ -72,21 +73,21 @@ func (_ *UserController) DeleteFromFavourite(c *gin.Context) {
 }
 
 func (_ *UserController) GetFavouriteRecipes(c *gin.Context) {
-
-	userid, err := strconv.Atoi(c.Param("userID"))
-	if err != nil {
-		c.JSON(404, map[string]interface{}{
-			"error":     err,
-			"errorCode": 100,
-			"recipes":   []model.Recipe{},
-		})
-	}
+	var user_interface interface{}
+	c.Bind(&user_interface)
+	new := user_interface.(map[string]interface{})
 	var user = model.User{
-		UserId:   userid,
+		UserId:   int(new["userID"].(float64)),
 		RecipeID: 0,
 	}
 	recipes, err, code := user.GetFavouriteRecipes()
-
+	if err != nil {
+		c.JSON(404, map[string]interface{}{
+			"error":     err,
+			"errorCode": code,
+			"recipes":   []model.Recipe{},
+		})
+	}
 	c.JSON(http.StatusOK, map[string]interface{}{
 		"error":     err,
 		"errorCode": code,
