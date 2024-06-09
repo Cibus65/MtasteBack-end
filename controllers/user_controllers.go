@@ -11,8 +11,7 @@ import (
 
 type UserController struct{}
 
-func (_ *UserController) AddToFavourite(c *gin.Context) {
-
+func (_ *UserController) Favourite(c *gin.Context) {
 	var user_interface interface{}
 	c.Bind(&user_interface)
 	new := user_interface.(map[string]interface{})
@@ -23,8 +22,7 @@ func (_ *UserController) AddToFavourite(c *gin.Context) {
 		UserId:   int(new["userID"].(float64)),
 		RecipeID: int(new["recipeID"].(float64)),
 	}
-
-	result, flag, err, code := user.AddToFavourite()
+	result, flag, err, code := user.Favourite()
 
 	if err != nil {
 		c.JSON(404, map[string]interface{}{
@@ -42,40 +40,6 @@ func (_ *UserController) AddToFavourite(c *gin.Context) {
 			"flag":      flag,
 			"userID":    user.UserId,
 			"error":     fmt.Sprintf("%s", err),
-			"errorCode": code,
-		})
-	}
-}
-
-func (_ *UserController) DeleteFromFavourite(c *gin.Context) {
-
-	var user_interface interface{}
-	c.Bind(&user_interface)
-	new := user_interface.(map[string]interface{})
-	if new["userID"] == nil {
-		new["userID"] = 162758239.
-	}
-	var user = model.User{
-		UserId:   int(new["userID"].(float64)),
-		RecipeID: int(new["recipeID"].(float64)),
-	}
-
-	result, flag, err, code := user.DeleteFromFavourite()
-	if err == nil {
-		c.JSON(http.StatusOK, map[string]interface{}{
-			// "token": token,
-			"result":    result,
-			"flag":      flag,
-			"userID":    user.UserId,
-			"error":     fmt.Sprintf("%s", err),
-			"errorCode": code,
-		})
-	} else {
-		c.JSON(404, map[string]interface{}{
-			"result":    result,
-			"flag":      flag,
-			"userID":    user.UserId,
-			"error":     "",
 			"errorCode": code,
 		})
 	}
