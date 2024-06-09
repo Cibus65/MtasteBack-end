@@ -81,7 +81,7 @@ func (u *User) GetFavouriteRecipes() ([]Recipe, error, int) {
 	}
 	var recipes []Recipe
 	for _, id := range userFavourite.Favourite {
-		recipe, err := (&Recipe{}).GetByID(id)
+		recipe, err := (&Recipe{}).GetByIDclassic(id)
 		if err != nil {
 			return recipes, err, 100
 		}

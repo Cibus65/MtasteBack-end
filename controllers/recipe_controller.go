@@ -16,11 +16,18 @@ func (_ *RecipeController) GetRecipes(c *gin.Context) {
 
 	var recipe model.Recipe
 	page, err := strconv.Atoi(c.Param("page"))
+
 	if err != nil {
 		c.JSON(http.StatusNotFound, err)
 
 	}
-	recipes, err := recipe.GetByPage(page)
+	userid, err := strconv.Atoi(c.Param("userID"))
+
+	if err != nil {
+		c.JSON(http.StatusNotFound, err)
+
+	}
+	recipes, err := recipe.GetByPage(page, userid)
 	if err != nil {
 		c.JSON(http.StatusNotFound, err)
 
@@ -31,10 +38,22 @@ func (_ *RecipeController) GetRecipes(c *gin.Context) {
 func (_ *RecipeController) GetRecipe(c *gin.Context) {
 
 	id, err := strconv.Atoi(c.Param("id"))
+
+	if err != nil {
+		c.JSON(http.StatusNotFound, err)
+
+	}
+	userid, err := strconv.Atoi(c.Param("userID"))
+
+	if err != nil {
+		c.JSON(http.StatusNotFound, err)
+
+	}
+
 	if err != nil {
 		c.Error(err)
 	}
-	recipe, err := (&model.Recipe{}).GetByID(id)
+	recipe, err := (&model.Recipe{}).GetByID(id, userid)
 	if err != nil {
 		c.Error(err)
 		c.Status(404)
@@ -46,7 +65,15 @@ func (_ *RecipeController) GetRecipe(c *gin.Context) {
 func (_ *RecipeController) FindRecipe(c *gin.Context) {
 	words := c.Param("words")
 	words = strings.Replace(words, "+", " ", -1)
-	recipes, err := (&model.Recipe{}).FindRecipe(words)
+
+	userid, err := strconv.Atoi(c.Param("userID"))
+
+	if err != nil {
+		c.JSON(http.StatusNotFound, err)
+
+	}
+
+	recipes, err := (&model.Recipe{}).FindRecipe(words, userid)
 	if err != nil {
 		log.Printf("Failed to find recipe with words: %s \n\tERROR: %s", words, err)
 		c.JSON(http.StatusNotFound, nil)
@@ -57,7 +84,14 @@ func (_ *RecipeController) FindRecipe(c *gin.Context) {
 
 func (_ *RecipeController) GetRandomRecipe(c *gin.Context) {
 
-	recipes, err := (&model.Recipe{}).GetRandomRecipe()
+	userid, err := strconv.Atoi(c.Param("userID"))
+
+	if err != nil {
+		c.JSON(http.StatusNotFound, err)
+
+	}
+
+	recipes, err := (&model.Recipe{}).GetRandomRecipe(userid)
 	if err != nil {
 		log.Printf("Failed to get random recipe: \n\tERROR: %s", err)
 		c.JSON(http.StatusNotFound, nil)

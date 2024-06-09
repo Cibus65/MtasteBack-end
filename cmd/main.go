@@ -21,10 +21,10 @@ func RunServer() {
 		c.Next()
 	})
 	//recipe breakpoints
-	r.GET("Mtaste/API/getRecipeByPage/:page", (&controllers.RecipeController{}).GetRecipes)
-	r.GET("Mtaste/API/getRecipeByID/:id", (&controllers.RecipeController{}).GetRecipe)
-	r.GET("Mtaste/API/findRecipe/:words", (&controllers.RecipeController{}).FindRecipe)
-	r.GET("Mtaste/API/getRandomRecipe", (&controllers.RecipeController{}).GetRandomRecipe)
+	r.GET("Mtaste/API/getRecipeByPage/:page/:userID", (&controllers.RecipeController{}).GetRecipes)
+	r.GET("Mtaste/API/getRecipeByID/:id/:userID", (&controllers.RecipeController{}).GetRecipe)
+	r.GET("Mtaste/API/findRecipe/:words/:userID", (&controllers.RecipeController{}).FindRecipe)
+	r.GET("Mtaste/API/getRandomRecipe/:userID", (&controllers.RecipeController{}).GetRandomRecipe)
 
 	//auth breakpoints
 	r.POST("Mtaste/API/auth/signUp", (&controllers.AuthController{}).SignUp)
