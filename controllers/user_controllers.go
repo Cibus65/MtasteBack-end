@@ -4,6 +4,7 @@ import (
 	"back-end/model"
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -81,14 +82,16 @@ func (_ *UserController) DeleteFromFavourite(c *gin.Context) {
 }
 
 func (_ *UserController) GetFavouriteRecipes(c *gin.Context) {
-	var user_interface interface{}
-	c.Bind(&user_interface)
-	new := user_interface.(map[string]interface{})
-	if new["userID"] == nil {
-		new["userID"] = 162758239.
+	userId, err := strconv.Atoi(c.Param("userID"))
+	if err != nil {
+		c.JSON(404, map[string]interface{}{
+			"error":     err,
+			"errorCode": 100,
+			"recipes":   []model.Recipe{},
+		})
 	}
 	var user = model.User{
-		UserId:   int(new["userID"].(float64)),
+		UserId:   userId,
 		RecipeID: 0,
 	}
 	recipes, err, code := user.GetFavouriteRecipes()
