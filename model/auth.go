@@ -69,7 +69,7 @@ func (a *Auth) CreateUser() (bool, error, int) {
 	}
 
 	if !login_valid(a.Login) {
-		return false, fmt.Errorf("Логин должен быть не короче 8 символов, не длиннее 50, содержать хотя бы одну латинскую букву,не содержать другие спец.символы кроме \"_\" и цифр"), 9
+		return false, fmt.Errorf("Логин должен быть не короче 6 символов, не длиннее 12, содержать хотя бы одну латинскую букву,не содержать другие спец.символы кроме \"_\" и цифр"), 9
 	}
 	if a.Password != a.RetryPassword {
 		return false, fmt.Errorf("Пароли должны быть одинаковыми"), 5
@@ -208,7 +208,7 @@ func login_valid(login string) bool {
 			return false
 		}
 	}
-	if countChar+countDigit+countUnderline <= 50 && countChar+countDigit+countUnderline >= 8 && countChar > 0 {
+	if countChar+countDigit+countUnderline <= 12 && countChar+countDigit+countUnderline >= 6 && countChar > 0 {
 		return true
 	} else {
 		return false
