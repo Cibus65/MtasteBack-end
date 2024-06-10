@@ -50,15 +50,14 @@ func (_ *AuthController) SignIn(c *gin.Context) {
 		Password: new["password"].(string),
 	}
 
-	token, err, code,userid := user.SignIn()
+	token, err, code, userid := user.SignIn()
 	if err != nil {
 		c.JSON(http.StatusOK, map[string]interface{}{
 			"token":     token,
 			"login":     user.Login,
 			"error":     fmt.Sprintf("%s", err),
 			"errorCode": code,
-			"userid":userid,
-
+			"userID":    userid,
 		})
 	} else {
 		c.JSON(http.StatusOK, map[string]interface{}{
@@ -66,8 +65,7 @@ func (_ *AuthController) SignIn(c *gin.Context) {
 			"login":     user.Login,
 			"error":     "",
 			"errorCode": code,
-			"userid":userid,
-
+			"userID":    userid,
 		})
 	}
 

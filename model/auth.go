@@ -75,6 +75,7 @@ func (a *Auth) CreateUser() (bool, error, int) {
 		return false, fmt.Errorf("Пароли должны быть одинаковыми"), 5
 	}
 	a.Password = hashpasswd(a.Password)
+	a.RetryPassword = hashpasswd(a.RetryPassword)
 
 	_, flag, err := findUser(a.Login)
 	if err != nil {
