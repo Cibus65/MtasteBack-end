@@ -1,13 +1,21 @@
+version: '3'
+
 services:
+  frontend:
+    image: xapsiel3301/mtaste_frontend
+    container_name: 'frontend'
+    ports:
+      - "8083:80"
+    networks:
+      - back_net
+    depends_on:
+      - backend
 
   backend:
-    image: 'xapsiel3301/mtaste_backend'
-    container_name: 'backend'
+    image: xapsiel3301/mtaste_backend
+    container_name: 'backend'  # Удалите пробел здесь
     ports:
-      - '8084:8080'
-    depends_on:
-      mongodb:
-        condition: service_healthy
+      - "8082:8082"
     networks:
       - back_net
   mongodb:
@@ -21,8 +29,14 @@ services:
       timeout: 10s
       retries: 5
     ports:
-      - '8083:27017'
-
+      - '27017:27017'
+  watchtower:
+    image: containrrr/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - WATCHTOWER_POLL_INTERVAL=10
 
 networks:
   back_net:
+    driver: host
