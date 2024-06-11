@@ -1,16 +1,6 @@
- GNU nano 7.2                                         compose.yml                                                   
 version: '3'
 
 services:
-  frontend:
-    image: xapsiel3301/mtaste_frontend
-    container_name: 'frontend'
-    ports:
-      - "8083:80"
-    networks:
-      - back_net
-    depends_on:
-      - backend
 
   backend:
     image: xapsiel3301/mtaste_backend

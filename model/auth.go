@@ -16,7 +16,7 @@ import (
 const (
 	salt          = "tklw12hfoiv3pjihu5u521jofc29urji"
 	signingKey    = "gag2rp1jkr21fvi0jio2jqfwcpkkngjy2t0tfp"
-	valid_symbols = "abcdefghijklmnopqrstuvwxyz0123456789"
+	valid_symbols = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
 )
 
 type Auth struct {
@@ -69,12 +69,13 @@ func (a *Auth) CreateUser() (bool, error, int) {
 	}
 
 	if !login_valid(a.Login) {
-		return false, fmt.Errorf("Логин должен быть не короче 8 символов, не длиннее 50, содержать хотя бы одну латинскую букву,не содержать другие спец.символы кроме \"_\" и цифр"), 9
+		return false, fmt.Errorf("Логин должен быть не короче 6 символов, не длиннее 12, содержать хотя бы одну латинскую букву,не содержать другие спец.символы кроме \"_\" и цифр"), 9
 	}
 	if a.Password != a.RetryPassword {
 		return false, fmt.Errorf("Пароли должны быть одинаковыми"), 5
 	}
 	a.Password = hashpasswd(a.Password)
+	a.RetryPassword = hashpasswd(a.RetryPassword)
 
 	_, flag, err := findUser(a.Login)
 	if err != nil {
@@ -111,18 +112,18 @@ func findUser(login string) (Auth, bool, error) {
 	}
 }
 
-func (a *Auth) SignIn() (string, error, int,int) {
+func (a *Auth) SignIn() (string, error, int, int) {
 	a.Password = hashpasswd(a.Password)
 	a.RetryPassword = hashpasswd(a.RetryPassword)
 	user, err, code := getUser(a.Login, a.Password)
 	if err != nil {
-		return "", err, code,0
+		return "", err, code, 0
 	}
 	jwt, err := a.GenerateJWT(user)
 	if err != nil {
-		return "", err, 100,0
+		return "", err, 100, 0
 	}
-	return jwt, err, code,user.ID
+	return jwt, err, code, user.ID
 
 }
 
@@ -172,7 +173,6 @@ func hashpasswd(password string) string {
 //	}
 //	return fmt.Sprintf("Рецепт с ID[ %d ] был добавлен", recipeID), nil
 //}
- 
 
 func password_valid(password string) bool {
 	countDigit, countChar, countUnderline := 0, 0, 0
@@ -208,7 +208,7 @@ func login_valid(login string) bool {
 			return false
 		}
 	}
-	if countChar+countDigit+countUnderline <= 50 && countChar+countDigit+countUnderline >= 8 && countChar > 0 {
+	if countChar+countDigit+countUnderline <= 12 && countChar+countDigit+countUnderline >= 6 && countChar > 0 {
 		return true
 	} else {
 		return false

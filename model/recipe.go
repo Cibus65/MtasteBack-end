@@ -22,6 +22,7 @@ type Recipe struct {
 	ImgWindowUrl string            `json:"imgwindowurl"`
 	UnixTime     int               `json:"unixTime"`
 	Synopsis     string            `json:"synopsis"`
+	IsFavourite  bool              `json:"isFavourite"`
 }
 
 func (r *Recipe) GetByPage(page int) ([]Recipe, error) {
@@ -52,8 +53,24 @@ func (r *Recipe) GetByPage(page int) ([]Recipe, error) {
 			break
 		}
 	}
+	if err != nil {
+		return []Recipe{}, err
+	}
 	return recipes, nil
 }
+func (r *Recipe) GetByIDclassic(id int) (Recipe, error) {
+	var recipe Recipe
+	collection := config.MongoClient.Database("RecipeBook").Collection("recipes")
+	//collection := config.MongoClient.Database("RecipeBook").Collection("recipe")
+	filter := bson.D{{"id", id}}
+	cursor := collection.FindOne(context.TODO(), filter)
+	err := cursor.Decode(&recipe)
+	if err != nil {
+		return Recipe{}, err
+	}
+	return recipe, nil
+}
+
 func (r *Recipe) GetByID(id int) (Recipe, error) {
 	var recipe Recipe
 	collection := config.MongoClient.Database("RecipeBook").Collection("recipes")
@@ -144,3 +161,26 @@ func getMaxID(collection *mongo.Collection) (int, error) {
 	return max_id, nil
 
 }
+
+// func checkIsFavourite(recipes []Recipe) ([]Recipe, error, int) {
+// 	favourite, err, code := user.GetFavouriteRecipes()
+
+// 	for index, recipe := range recipes {
+// 		if contain(favourite, &recipe) {
+// 			recipes[index].IsFavourite = true
+// 		} else {
+// 			recipes[index].IsFavourite = false
+// 		}
+// 	}
+// 	return recipes, err, code
+
+// }
+
+// func contain(recipes []Recipe, recipe *Recipe) bool {
+// 	for _, rec := range recipes {
+// 		if rec.ID == recipe.ID {
+// 			return true
+// 		}
+// 	}
+// 	return false
+// }
