@@ -18,8 +18,10 @@ func (_ *UserController) Favourite(c *gin.Context) {
 	if new["userID"] == nil {
 		new["userID"] = 162758239.
 	}
+	userID, _ := strconv.Atoi(new["userID"].(string))
+
 	var user = model.User{
-		UserId:   int(new["userID"].(float64)),
+		UserId:   userID,
 		RecipeID: int(new["recipeID"].(float64)),
 	}
 	result, flag, err, code := user.Favourite()
