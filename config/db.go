@@ -2,7 +2,6 @@ package config
 
 import (
 	"context"
-	"fmt"
 	"log"
 	"os"
 
@@ -28,7 +27,6 @@ func ConnectToDB() error {
 	serverAPI := options.ServerAPI(options.ServerAPIVersion1)
 	opts := options.Client().ApplyURI("mongodb://mongodb:27017").SetServerAPIOptions(serverAPI)
 	client, err := mongo.Connect(context.TODO(), opts)
-	fmt.Println(err, "1")
 	if err != nil {
 		return err
 	}

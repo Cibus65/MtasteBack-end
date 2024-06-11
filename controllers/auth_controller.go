@@ -21,7 +21,6 @@ func (_ *AuthController) SignUp(c *gin.Context) {
 	}
 
 	result, err, code := user.CreateUser()
-	fmt.Println(result, user, "\n\n")
 
 	if err != nil {
 		c.JSON(http.StatusOK, map[string]interface{}{
