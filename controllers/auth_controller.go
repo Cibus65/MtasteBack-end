@@ -24,7 +24,7 @@ func (_ *AuthController) SignUp(c *gin.Context) {
 	fmt.Println(result, user, "\n\n")
 
 	if err != nil {
-		c.JSON(404, map[string]interface{}{
+		c.JSON(http.StatusOK, map[string]interface{}{
 			// "token": token,
 			"result":    result,
 			"login":     user.Login,
@@ -52,7 +52,7 @@ func (_ *AuthController) SignIn(c *gin.Context) {
 
 	token, err, code, userid := user.SignIn()
 	if err != nil {
-		c.JSON(404, map[string]interface{}{
+		c.JSON(http.StatusOK, map[string]interface{}{
 			"token":     token,
 			"login":     user.Login,
 			"error":     fmt.Sprintf("%s", err),
