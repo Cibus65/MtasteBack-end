@@ -30,4 +30,4 @@ services:
 
 networks:
   back_net:
-    driver: host
+    driver: bridge
